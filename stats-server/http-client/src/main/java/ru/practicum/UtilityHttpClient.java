@@ -24,7 +24,7 @@ public class UtilityHttpClient {
             dateTime.put("endDate", endDate);
             dateTime.put("endTime", endTime);
             return dateTime;
-        } else  {
+        } else {
             throw new RuntimeException("start or end should not be null");
         }
     }
