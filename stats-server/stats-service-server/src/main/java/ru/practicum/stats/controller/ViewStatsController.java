@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.practicum.dto.ViewStatsDto;
-import ru.practicum.stats.mappers.ViewStatsMapper;
 import ru.practicum.stats.service.ViewStatsService;
 import ru.practicum.utils.TimeEncoder;
 
@@ -28,8 +27,6 @@ public class ViewStatsController {
                                   @RequestParam(value = "unique", required = false) Boolean unique) {
         log.info("Get stats with parameters start: {}, end: {}, uri: {}, unique: {}", start, end, uris, unique);
         return viewStatsService.getViewStats(TimeEncoder.decodeToLclDt(start), TimeEncoder.decodeToLclDt(end),
-                        uris, unique).stream()
-                .map(ViewStatsMapper::toViewstatsDto)
-                .toList();
+                uris, unique);
     }
 }

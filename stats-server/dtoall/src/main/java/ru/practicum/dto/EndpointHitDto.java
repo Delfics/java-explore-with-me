@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Data
 public class EndpointHitDto {
     @NotNull
-    @Pattern(regexp = "^(?!,*$).+", message = "Названи категории не может быть пустым или содержать один символ")
+    @Pattern(regexp = "^(?!,*$).+", message = "Название сервиса не может быть пустым или содержать один символ")
     private String app;
     @NotNull
     @Pattern(regexp = "^(?!,*$).+", message = "Uri не может быть пустым или содержать один символ")

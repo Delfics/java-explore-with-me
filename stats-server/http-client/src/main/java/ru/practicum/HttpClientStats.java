@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.net.URI;
 import java.net.URLEncoder;
@@ -19,7 +20,8 @@ import java.util.List;
 @AllArgsConstructor
 public class HttpClientStats {
     private static final HttpClient httpClient = HttpClient.newHttpClient();
-    private final String url = "http://localhost:9090";
+    @Value("${url}")
+    private final String url;
     private static final String endpointStats = "/stats";
     private static final String endpointHits = "/hits";
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -39,7 +41,6 @@ public class HttpClientStats {
     }
 
     public List<ViewStatsDto> sendGetViewStats(LocalDateTime start, LocalDateTime end) throws Exception {
-        StringBuilder sb = new StringBuilder();
         HashMap<String, String> kvDateTime = UtilityHttpClient.trimLocalDateTime(start, end);
 
         String queryParams = String.format(
@@ -48,13 +49,7 @@ public class HttpClientStats {
                 URLEncoder.encode(kvDateTime.get("endDate") + " " + kvDateTime.get("endTime"), StandardCharsets.UTF_8)
         );
 
-        sb.append(url).append(endpointStats).append("?").append(queryParams);
-
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(URI.create(sb.toString()))
-                .header("Content-Type", "application/json")
-                .GET()
-                .build();
+        HttpRequest httpRequest = UtilityHttpClient.httpRequestGetStringBuilder(url, endpointStats, queryParams);
 
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
@@ -64,7 +59,6 @@ public class HttpClientStats {
 
     public List<ViewStatsDto> sendGetViewStatsWithUris(LocalDateTime start, LocalDateTime end,
                                                        List<String> uris) throws Exception {
-        StringBuilder sb = new StringBuilder();
         HashMap<String, String> kvDateTime = UtilityHttpClient.trimLocalDateTime(start, end);
         String urisString = String.join(",", uris);
 
@@ -74,13 +68,7 @@ public class HttpClientStats {
                 URLEncoder.encode(kvDateTime.get("endDate") + " " + kvDateTime.get("endTime"), StandardCharsets.UTF_8),
                 URLEncoder.encode(urisString, StandardCharsets.UTF_8)
         );
-        sb.append(url).append(endpointStats).append("?").append(queryParams);
-
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(URI.create(sb.toString()))
-                .header("Content-Type", "application/json")
-                .GET()
-                .build();
+        HttpRequest httpRequest = UtilityHttpClient.httpRequestGetStringBuilder(url, endpointStats, queryParams);
 
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
@@ -89,7 +77,6 @@ public class HttpClientStats {
     }
 
     public List<ViewStatsDto> sendGetViewStatsWithUnique(LocalDateTime start, LocalDateTime end, Boolean unique) throws Exception {
-        StringBuilder sb = new StringBuilder();
         HashMap<String, String> kvDateTime = UtilityHttpClient.trimLocalDateTime(start, end);
 
         String queryParams = String.format(
@@ -99,13 +86,7 @@ public class HttpClientStats {
                 URLEncoder.encode(unique.toString(), StandardCharsets.UTF_8)
         );
 
-        sb.append(url).append(endpointStats).append("?").append(queryParams);
-
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(URI.create(sb.toString()))
-                .header("Content-Type", "application/json")
-                .GET()
-                .build();
+        HttpRequest httpRequest = UtilityHttpClient.httpRequestGetStringBuilder(url, endpointStats, queryParams);
 
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
@@ -126,13 +107,8 @@ public class HttpClientStats {
                 URLEncoder.encode(urisString, StandardCharsets.UTF_8),
                 URLEncoder.encode(unique.toString(), StandardCharsets.UTF_8)
         );
-        sb.append(url).append(endpointStats).append("?").append(queryParams);
 
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(URI.create(sb.toString()))
-                .header("Content-Type", "application/json")
-                .GET()
-                .build();
+        HttpRequest httpRequest = UtilityHttpClient.httpRequestGetStringBuilder(url, endpointStats, queryParams);
 
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 

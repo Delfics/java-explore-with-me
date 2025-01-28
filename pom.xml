@@ -21,9 +21,6 @@
     <modules>
         <module>ewm-service</module>
         <module>stats-server</module>
-        <module>stats-server/dtoall</module>
-        <module>stats-server/stats-service-server</module>
-        <module>stats-server/http-client</module>
     </modules>
 
     <properties>

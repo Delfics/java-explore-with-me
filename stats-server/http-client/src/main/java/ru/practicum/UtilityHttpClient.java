@@ -2,13 +2,15 @@ package ru.practicum;
 
 import lombok.experimental.UtilityClass;
 
+import java.net.URI;
+import java.net.http.HttpRequest;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
 @UtilityClass
 public class UtilityHttpClient {
-    public static HashMap<String, String> trimLocalDateTime(LocalDateTime start, LocalDateTime end) {
+    public HashMap<String, String> trimLocalDateTime(LocalDateTime start, LocalDateTime end) {
         if (start != null && end != null) {
             HashMap<String, String> dateTime = new HashMap<>();
             DateTimeFormatter formatterDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -27,5 +29,15 @@ public class UtilityHttpClient {
         } else {
             throw new RuntimeException("start or end should not be null");
         }
+    }
+
+    public HttpRequest httpRequestGetStringBuilder(String url, String endpoint, String queryParams) {
+        StringBuilder sb = new StringBuilder();
+        StringBuilder sbBuild = sb.append(url).append(endpoint).append("?").append(queryParams);
+        return HttpRequest.newBuilder()
+                .uri(URI.create(sbBuild.toString()))
+                .header("Content-Type", "application/json")
+                .GET()
+                .build();
     }
 }

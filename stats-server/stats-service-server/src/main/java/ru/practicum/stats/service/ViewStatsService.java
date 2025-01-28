@@ -3,8 +3,8 @@ package ru.practicum.stats.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.practicum.dto.ViewStatsDto;
 import ru.practicum.endpointhit.repository.EndpointHitStorageJpa;
-import ru.practicum.stats.model.ViewStats;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ public class ViewStatsService {
         this.endpointHitStorageJpa = endpointHitStorageJpa;
     }
 
-    public List<ViewStats> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
+    public List<ViewStatsDto> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         if (uris == null && unique == null) {
             return endpointHitStorageJpa.getStatsBetweenStartAndEnd(start, end);
         } else if (uris == null && !unique) {

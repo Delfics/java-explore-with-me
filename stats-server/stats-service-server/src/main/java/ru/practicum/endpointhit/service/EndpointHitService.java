@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import ru.practicum.endpointhit.model.EndpointHit;
 import ru.practicum.endpointhit.repository.EndpointHitStorageJpa;
 
-import java.util.List;
 
 @Slf4j
 @Service
@@ -16,10 +15,6 @@ public class EndpointHitService {
     @Autowired
     public EndpointHitService(EndpointHitStorageJpa endpointHitStorageJpa) {
         this.endpointHitStorageJpa = endpointHitStorageJpa;
-    }
-
-    public List<EndpointHit> getAll() {
-        return endpointHitStorageJpa.findAll();
     }
 
     public EndpointHit create(EndpointHit endpointHit) {

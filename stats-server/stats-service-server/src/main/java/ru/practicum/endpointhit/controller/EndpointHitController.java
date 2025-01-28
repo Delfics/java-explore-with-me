@@ -8,8 +8,6 @@ import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.endpointhit.mappers.EndpointHitMapper;
 import ru.practicum.endpointhit.service.EndpointHitService;
 
-import java.util.List;
-
 @Slf4j
 @RestController
 @RequestMapping("/hit")
@@ -19,14 +17,6 @@ public class EndpointHitController {
     @Autowired
     public EndpointHitController(EndpointHitService endpointHitService) {
         this.endpointHitService = endpointHitService;
-    }
-
-    @GetMapping
-    public List<EndpointHitDto> getAll() {
-        log.info("Get all EndpointHits");
-        return endpointHitService.getAll().stream()
-                .map(EndpointHitMapper::toEndpointHitDto)
-                .toList();
     }
 
     @PostMapping
