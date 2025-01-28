@@ -18,7 +18,7 @@ import java.util.List;
 
 @AllArgsConstructor
 public class HttpClientStats {
-    private static final HttpClient httpClient=HttpClient.newHttpClient();;
+    private static final HttpClient httpClient = HttpClient.newHttpClient();
     private final String url = "http://localhost:9090";
     private static final String endpointStats = "/stats";
     private static final String endpointHits = "/hits";
@@ -58,10 +58,12 @@ public class HttpClientStats {
 
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-        return objectMapper.readValue(httpResponse.body(), new TypeReference<List<ViewStatsDto>>() {});
+        return objectMapper.readValue(httpResponse.body(), new TypeReference<List<ViewStatsDto>>() {
+        });
     }
 
-    public List<ViewStatsDto> sendGetViewStatsWithUris(LocalDateTime start, LocalDateTime end, List<String> uris) throws Exception {
+    public List<ViewStatsDto> sendGetViewStatsWithUris(LocalDateTime start, LocalDateTime end,
+                                                       List<String> uris) throws Exception {
         StringBuilder sb = new StringBuilder();
         HashMap<String, String> kvDateTime = UtilityHttpClient.trimLocalDateTime(start, end);
         String urisString = String.join(",", uris);
@@ -82,7 +84,8 @@ public class HttpClientStats {
 
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-        return objectMapper.readValue(httpResponse.body(), new TypeReference<List<ViewStatsDto>>() {});
+        return objectMapper.readValue(httpResponse.body(), new TypeReference<List<ViewStatsDto>>() {
+        });
     }
 
     public List<ViewStatsDto> sendGetViewStatsWithUnique(LocalDateTime start, LocalDateTime end, Boolean unique) throws Exception {
@@ -106,7 +109,8 @@ public class HttpClientStats {
 
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-        return objectMapper.readValue(httpResponse.body(), new TypeReference<List<ViewStatsDto>>() {});
+        return objectMapper.readValue(httpResponse.body(), new TypeReference<List<ViewStatsDto>>() {
+        });
     }
 
     public List<ViewStatsDto> sendGetViewStatsWithUrisAndUnique(LocalDateTime start, LocalDateTime end,
@@ -132,6 +136,7 @@ public class HttpClientStats {
 
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
-        return objectMapper.readValue(httpResponse.body(), new TypeReference<List<ViewStatsDto>>() {});
+        return objectMapper.readValue(httpResponse.body(), new TypeReference<List<ViewStatsDto>>() {
+        });
     }
 }
