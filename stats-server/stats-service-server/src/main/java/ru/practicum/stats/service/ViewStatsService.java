@@ -23,7 +23,11 @@ public class ViewStatsService {
     public List<ViewStats> getViewStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
         if (uris == null && unique == null) {
             return endpointHitStorageJpa.getStatsBetweenStartAndEnd(start, end);
-        } else if (uris != null && !uris.isEmpty() && unique == null) {
+        } else if (uris == null && !unique) {
+            return endpointHitStorageJpa.getStatsBetweenStartAndEnd(start, end);
+        }  else if (uris != null && !uris.isEmpty() && unique == null) {
+            return endpointHitStorageJpa.getStatsWithUris(start, end, uris);
+        } else if (uris != null && !uris.isEmpty() && !unique) {
             return endpointHitStorageJpa.getStatsWithUris(start, end, uris);
         } else if (unique && uris == null) {
             return endpointHitStorageJpa.getStatsWithUniqueIp(start, end);

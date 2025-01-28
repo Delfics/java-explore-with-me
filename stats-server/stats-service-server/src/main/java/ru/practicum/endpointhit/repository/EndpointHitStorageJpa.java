@@ -23,21 +23,24 @@ public interface EndpointHitStorageJpa extends JpaRepository<EndpointHit, Long> 
             "FROM EndpointHit e " +
             "WHERE e.timestamp BETWEEN :start AND :end " +
             "AND e.uri IN :uris " +
-            "GROUP BY e.app, e.uri")
+            "GROUP BY e.app, e.uri " +
+            "ORDER BY COUNT(e) DESC ")
     List<ViewStats> getStatsWithUris(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end,
                                      @Param("uris") List<String> uris);
 
-    @Query("SELECT new ru.practicum.stats.model.ViewStats(e.app, e.uri, COUNT(e)) " +
+    @Query("SELECT new ru.practicum.stats.model.ViewStats(e.app, e.uri, COUNT(DISTINCT e.ip)) " +
             "FROM EndpointHit e " +
             "WHERE e.timestamp BETWEEN :start AND :end " +
-            "GROUP BY e.ip, e.app, e.uri")
+            "GROUP BY e.app, e.uri " +
+            "ORDER BY COUNT(e) DESC ")
     List<ViewStats> getStatsWithUniqueIp(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
-    @Query("SELECT new ru.practicum.stats.model.ViewStats(e.app, e.uri, COUNT(e)) " +
+    @Query("SELECT new ru.practicum.stats.model.ViewStats(e.app, e.uri, COUNT(DISTINCT e.ip)) " +
             "FROM EndpointHit e " +
             "WHERE e.timestamp BETWEEN :start AND :end " +
             "AND e.uri IN :uris " +
-            "GROUP BY e.ip, e.app, e.uri")
+            "GROUP BY e.app, e.uri " +
+            "ORDER BY COUNT(e) DESC")
     List<ViewStats> getStatsWithUrisAndUniqueIp(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end,
                                                 @Param("uris") List<String> uris);
 }
