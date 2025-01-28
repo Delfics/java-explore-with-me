@@ -1,5 +1,7 @@
 services:
   statservice:
+    build:
+      context: ./statservice
     ports:
       - "9090:9090"
 
