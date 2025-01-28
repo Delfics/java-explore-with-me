@@ -18,6 +18,19 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <!-- Плагин для Spring Boot -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>ru.practicum.Application</mainClass> <!-- Указываем главный класс -->
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
