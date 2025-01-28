@@ -19,11 +19,11 @@
     </parent>
 
     <modules>
-        <module>mainservice</module>
-        <module>statservice</module>
-        <module>statservice/dtoall</module>
-        <module>statservice/httpstatservice</module>
-        <module>statservice/httpclient</module>
+        <module>ewm-service</module>
+        <module>stats-server</module>
+        <module>stats-server/dtoall</module>
+        <module>stats-server/stats-service-server</module>
+        <module>stats-server/http-client</module>
     </modules>
 
     <!--<dependencies>

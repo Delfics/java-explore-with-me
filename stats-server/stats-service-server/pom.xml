@@ -10,7 +10,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>httpstatservice</artifactId>
+    <artifactId>stats-service-server</artifactId>
 
     <dependencies>
         <dependency>

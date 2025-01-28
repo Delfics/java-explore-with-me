@@ -10,7 +10,7 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <artifactId>httpclient</artifactId>
+    <artifactId>http-client</artifactId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
