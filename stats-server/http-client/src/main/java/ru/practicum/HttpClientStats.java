@@ -96,7 +96,6 @@ public class HttpClientStats {
 
     public List<ViewStatsDto> sendGetViewStatsWithUrisAndUnique(LocalDateTime start, LocalDateTime end,
                                                                 List<String> uris, Boolean unique) throws Exception {
-        StringBuilder sb = new StringBuilder();
         HashMap<String, String> kvDateTime = UtilityHttpClient.trimLocalDateTime(start, end);
         String urisString = String.join(",", uris);
 
