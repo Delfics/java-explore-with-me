@@ -1,7 +1,5 @@
 services:
   stats-server:
-    build:
-      context: ./stats-server
     ports:
       - "9090:9090"
     depends_on:
@@ -23,8 +21,6 @@ services:
       retries: 10
 
   ewm-service:
-    build:
-      context: ./ewm-service
     ports:
       - "8080:8080"
 
