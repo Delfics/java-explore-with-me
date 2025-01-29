@@ -1,12 +1,30 @@
 services:
   stats-server:
+    build:
+      context: ./stats-server
     ports:
       - "9090:9090"
+    depends_on:
+      - stats-db
 
   stats-db:
     image: postgres:16.1
+    container_name: postgres-stats
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_PASSWORD=stats-server
+      - POSTGRES_USER=stats-server
+      - POSTGRES_DB=stats-server
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 10
 
   ewm-service:
+    build:
+      context: ./ewm-service
     ports:
       - "8080:8080"
 
