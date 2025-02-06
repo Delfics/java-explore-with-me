@@ -1,0 +1,16 @@
+package ru.practicum.open.category.repository;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+import ru.practicum.open.category.model.Category;
+
+import java.util.List;
+
+@Repository
+public interface PublicCategoryStorage extends JpaRepository<Category, Long> {
+    @Query("SELECT c " +
+            "FROM Category as c ")
+    List<Category> findAllSortedFromAndSize(Pageable pageable);
+}

@@ -11,13 +11,6 @@
 
     <artifactId>ewm-service</artifactId>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-    </dependencies>
-
     <build>
         <plugins>
             <!-- Плагин для Spring Boot -->
@@ -25,7 +18,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>ru.practicum.Application</mainClass> <!-- Указываем главный класс -->
+                    <mainClass>ru.practicum.ApplicationEwmService</mainClass> <!-- Указываем главный класс -->
                 </configuration>
             </plugin>
         </plugins>
