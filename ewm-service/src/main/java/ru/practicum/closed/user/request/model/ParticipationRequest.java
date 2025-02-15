@@ -1,5 +1,6 @@
 package ru.practicum.closed.user.request.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import ru.practicum.status.Status;
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 public class ParticipationRequest {
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Column(name = "created")
     private LocalDateTime created;
 

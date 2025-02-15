@@ -11,10 +11,16 @@ import java.util.List;
 public interface PublicCompilationStorage extends JpaRepository<Compilation, Long> {
     @Query("SELECT c " +
             "FROM Compilation as c " +
+            "LEFT JOIN FETCH c.events " +
             "WHERE c.pinned = :pined ")
     List<Compilation> findAllPinedSortedFromAndSize(@Param("pined") Boolean pined, Pageable pageable);
 
     @Query("SELECT c " +
-            "FROM Compilation as c ")
+            "FROM Compilation as c " +
+            "LEFT JOIN FETCH c.events ")
     List<Compilation> findAllSortedFromAndSize(Pageable pageable);
+
+/*
+    Compilation findCompilation
+*/
 }

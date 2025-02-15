@@ -31,6 +31,33 @@ public interface PrivateParticipationRequestStorage extends JpaRepository<Partic
             "JOIN Event e ON prqst.event = e.id " +
             "WHERE e.initiator.id = :initiatorId " +
             "AND e.id = :eventId")
-    ParticipationRequest findRequestByInitiatorIdAndEventId(@Param("initiatorId") Long initiatorId,
+    List<ParticipationRequest> findRequestsByInitiatorIdAndEventId(@Param("initiatorId") Long initiatorId,
+                                                                   @Param("eventId") Long eventId);
+
+    @Query("SELECT COUNT(prqst) " +
+            "FROM ParticipationRequest as prqst " +
+            "JOIN Event e ON prqst.event = e.id " +
+            "WHERE e.initiator.id = :initiatorId " +
+            "AND e.id = :eventId")
+    List<Long> findCountRequestsByInitiatorIdAndEventId(@Param("initiatorId") Long initiatorId,
+                                                        @Param("eventId") Long eventId);
+
+    @Query("SELECT prqst " +
+            "FROM ParticipationRequest as prqst " +
+            "WHERE prqst.event = :eventId " +
+            "AND prqst.requester = :requesterId ")
+    ParticipationRequest findRequestByRequesterIdAndEventId(@Param("requesterId") Long requesterId,
                                                             @Param("eventId") Long eventId);
+
+    @Query("SELECT prqst " +
+            "FROM ParticipationRequest as prqst " +
+            "WHERE prqst.id = :requestId " +
+            "AND prqst.requester = :requesterId")
+    ParticipationRequest findRequestByRequesterIdAndRequestId(@Param("requesterId") Long requesterId,
+                                                              @Param("requestId") Long requestId);
+
+    @Query("SELECT prqst " +
+            "FROM ParticipationRequest as prqst " +
+            "WHERE prqst.event = :eventId")
+    List<ParticipationRequest> findRequestsByEventId(@Param("eventId") Long eventId);
 }

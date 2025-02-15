@@ -6,7 +6,7 @@ import ru.practicum.dto.ParticipationRequestDto;
 
 @UtilityClass
 public class ParticipationRequestMapper {
-    public ParticipationRequestDto toDto(ParticipationRequest participationRequest) {
+    public ParticipationRequestDto toParitcipationRequestDto(ParticipationRequest participationRequest) {
         ParticipationRequestDto dto = new ParticipationRequestDto();
         dto.setId(participationRequest.getId());
         dto.setRequester(participationRequest.getRequester());
@@ -16,7 +16,7 @@ public class ParticipationRequestMapper {
         return dto;
     }
 
-    public ParticipationRequest fromDto(ParticipationRequestDto participationRequestDto) {
+    public ParticipationRequest toParticipationRequest(ParticipationRequestDto participationRequestDto) {
         ParticipationRequest participationRequest = new ParticipationRequest();
         participationRequest.setId(participationRequestDto.getId());
         participationRequest.setRequester(participationRequestDto.getRequester());

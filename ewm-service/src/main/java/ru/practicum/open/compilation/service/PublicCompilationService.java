@@ -3,7 +3,7 @@ package ru.practicum.open.compilation.service;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import ru.practicum.exception.BadRequestException;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.open.compilation.model.Compilation;
 import ru.practicum.open.compilation.repository.PublicCompilationStorage;
@@ -18,6 +18,7 @@ public class PublicCompilationService {
         this.publicCompilationStorage = publicCompilationStorage;
     }
 
+    @Transactional
     public List<Compilation> findAllPinedSortedFromAndSize(Boolean pined, Long from, Long size) {
         Pageable pageable = PageRequest.of(from.intValue(), size.intValue());
         if (pined != null && pined) {
@@ -27,6 +28,7 @@ public class PublicCompilationService {
         }
     }
 
+    @Transactional
     public Compilation findById(Long id) {
         Compilation compilation = publicCompilationStorage.findById(id).orElse(null);
         if (compilation == null) {

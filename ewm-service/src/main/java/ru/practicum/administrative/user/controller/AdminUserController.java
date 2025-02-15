@@ -1,7 +1,10 @@
 package ru.practicum.administrative.user.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.administrative.user.mapper.UserMapper;
 import ru.practicum.administrative.user.service.AdminUserService;
@@ -29,12 +32,14 @@ public class AdminUserController {
     }
 
     @PostMapping
-    public UserDto create(@RequestBody UserDto userDto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserDto create(@RequestBody @Valid UserDto userDto) {
         log.info("Create user: {}", userDto);
         return UserMapper.toUserDto(adminUserService.create(UserMapper.toUser(userDto)));
     }
 
     @DeleteMapping("/{userId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long userId) {
         log.info("Delete user: {}", userId);
         adminUserService.deleteById(userId);

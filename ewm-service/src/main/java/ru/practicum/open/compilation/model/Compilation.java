@@ -2,15 +2,15 @@ package ru.practicum.open.compilation.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import ru.practicum.dto.EventShortDto;
+import ru.practicum.closed.user.event.model.Event;
 
 import java.util.List;
 
 @Data
 @Entity
 public class Compilation {
-    @Column(name = "events")
-    private List<EventShortDto> events;
+    @OneToMany(mappedBy = "compilation", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Event> events;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

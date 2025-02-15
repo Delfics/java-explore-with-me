@@ -1,18 +1,18 @@
 package ru.practicum.closed.user.event.controller;
 
-import com.sun.jdi.request.EventRequest;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.closed.user.event.mapper.EventMapper;
+import ru.practicum.closed.user.event.model.Event;
 import ru.practicum.closed.user.event.model.EventRequestStatusUpdateResult;
 import ru.practicum.closed.user.event.model.UpdateEventUserRequest;
 import ru.practicum.closed.user.event.service.PrivateUserEventService;
 import ru.practicum.closed.user.request.mapper.ParticipationRequestMapper;
 import ru.practicum.closed.user.request.service.PrivateParticipationRequestService;
-import ru.practicum.dto.EventFullDto;
-import ru.practicum.dto.EventRequestStatusUpdateRequestDto;
-import ru.practicum.dto.EventShortDto;
-import ru.practicum.dto.ParticipationRequestDto;
+import ru.practicum.dto.*;
 
 import java.util.List;
 
@@ -38,37 +38,42 @@ public class PrivateUserEventController {
                 .toList();
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{userId}/events")
-    public EventFullDto createEventByUserId(@PathVariable("userId") Long userId, @RequestBody EventFullDto event) {
-        return EventMapper.toEventFullDto(privateUserEventService.create(EventMapper.toEvent(event)));
+    public EventFullDto createEventByUserId(@PathVariable("userId") Long userId,
+                                            @Valid @RequestBody NewEventDto newEventDto) {
+        return EventMapper.toEventFullDto(privateUserEventService.create(userId, newEventDto));
     }
 
     @GetMapping("{userId}/events/{eventId}")
     public EventFullDto getEventByUserIdAndEventId(@PathVariable("userId") Long userId,
                                                    @PathVariable("eventId") Long eventId) {
-        return EventMapper.toEventFullDto(privateUserEventService.findByInitiatorIdAndEventId(userId, eventId));
+        Event byInitiatorIdAndEventId = privateUserEventService.findByInitiatorIdAndEventId(userId, eventId);
+        return EventMapper.toEventFullDto(byInitiatorIdAndEventId);
     }
 
     @PatchMapping("/{userId}/events/{eventId}")
     public EventFullDto patchEventByUserIdAndEventId(@PathVariable("userId") Long userId,
                                                      @PathVariable("eventId") Long eventId,
-                                                     @RequestBody UpdateEventUserRequest patchEvent) {
+                                                     @RequestBody @Valid UpdateEventUserRequest patchEvent) {
         return EventMapper.toEventFullDto(privateUserEventService.patchByUserIdAndEventId(userId, eventId, patchEvent));
     }
 
     @GetMapping("/{userId}/events/{eventId}/requests")
-    public ParticipationRequestDto getParticipationRequestsByInitiatorIdAndEventId(@PathVariable("userId") Long initiatorId,
-                                                                                   @PathVariable("eventId") Long eventId) {
-        return ParticipationRequestMapper.toDto(privateParticipationRequestService
-                .findRequestByInitiatorIdAndEventId(initiatorId, eventId));
+    public List<ParticipationRequestDto> getParticipationRequestsByInitiatorIdAndEventId(@PathVariable("userId") Long initiatorId,
+                                                                                         @PathVariable("eventId") Long eventId) {
+        return privateParticipationRequestService.findRequestsByInitiatorIdAndEventId(initiatorId, eventId).stream()
+                .map(ParticipationRequestMapper::toParitcipationRequestDto)
+                .toList();
     }
 
     @PatchMapping("/{userId}/events/{eventId}/requests")
-    public EventRequestStatusUpdateResult patchRequestsByUserIdAndEventId(@PathVariable("userId") Long userId,
-                                                                          @PathVariable("eventId") Long eventId,
-                                                                          @RequestBody EventRequestStatusUpdateRequestDto
-                                                            eventRequestStatusUpdateRequestDto) {
+    public EventRequestStatusUpdateResult patchRequestsByInitiatorIdAndEventId(@PathVariable("userId") Long initiatorId,
+                                                                               @PathVariable("eventId") Long eventId,
+                                                                               @RequestBody EventRequestStatusUpdateRequestDto
+                                                                                       eventRequestStatusUpdateRequestDto) {
         return privateUserEventService.patchRequestsByUserIdAndEventId
-                (userId, eventId, eventRequestStatusUpdateRequestDto);
+                (initiatorId, eventId, eventRequestStatusUpdateRequestDto);
+
     }
 }

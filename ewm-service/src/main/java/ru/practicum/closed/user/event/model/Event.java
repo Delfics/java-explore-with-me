@@ -7,6 +7,7 @@ import ru.practicum.administrative.user.model.User;
 import ru.practicum.dto.LocationDto;
 import ru.practicum.model.Location;
 import ru.practicum.open.category.model.Category;
+import ru.practicum.open.compilation.model.Compilation;
 import ru.practicum.state.State;
 
 import java.time.LocalDateTime;
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 public class Event {
-    @Column(name = "annotation")
+    @Column(name = "annotation", length = 2000)
     private String annotation;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,7 +29,7 @@ public class Event {
     @Column(name = "created_on")
     private LocalDateTime createdOn;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 7000)
     private String description;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -60,12 +61,17 @@ public class Event {
     @Column(name = "request_moderation")
     private Boolean requestModeration;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "states")
     private State state;
 
-    @Column(name = "title")
+    @Column(name = "title", length = 120)
     private String title;
 
     @Column(name = "views")
     private Long views;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "compilation_id", referencedColumnName = "id")
+    private Compilation compilation;
 }

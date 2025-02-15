@@ -1,7 +1,10 @@
 package ru.practicum.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -15,7 +18,7 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 public class ExceptionControlHandler {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-    LocalDateTime now = LocalDateTime.parse(LocalDateTime.now().format(formatter));
+    String now = LocalDateTime.now().format(formatter);
 
     /*@ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler
@@ -29,7 +32,7 @@ public class ExceptionControlHandler {
     public ErrorResponse handleNotFoundException(NotFoundException e) {
         String reason = "The required object was not found.";
         log.error(e.getMessage(), e);
-        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), reason,  e.getMessage(), now);
+        return new ErrorResponse(HttpStatus.NOT_FOUND.name(), reason,  e.getMessage(), now);
 
     }
 
@@ -40,12 +43,20 @@ public class ExceptionControlHandler {
         return new ErrorResponse(e.getMessage());
     }*/
 
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ErrorResponse handleConflictException(DataIntegrityViolationException e) {
+        String reason = "Integrity constraint has been violated.";
+        log.error(e.getMessage(), e);
+        return new ErrorResponse(HttpStatus.CONFLICT.name(), reason, e.getMessage(), now);
+    }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleConflictException(ConflictException e) {
-        String reason = "For the requested operation the conditions are not met.";
+        String reason = "Integrity constraint has been violated.";
         log.error(e.getMessage(), e);
-        return new ErrorResponse(HttpStatus.CONTINUE.value(), reason, e.getMessage(), now);
+        return new ErrorResponse(HttpStatus.CONFLICT.name(), reason, e.getMessage(), now);
     }
 
     /*@ExceptionHandler
@@ -55,11 +66,43 @@ public class ExceptionControlHandler {
         return new ErrorResponse(e.getMessage());
     }*/
 
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBadRequestException(BadRequestException e) {
+        String reason = "Incorrectly made request.";
+        log.error(e.getMessage(), e);
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.name(), reason,  e.getMessage(), now);
+    }
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequestException(MethodArgumentTypeMismatchException e) {
         String reason = "Incorrectly made request.";
         log.error(e.getMessage(), e);
-        return new ErrorResponse(HttpStatus.BAD_REQUEST.value(), reason,  e.getMessage(), now);
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.name(), reason,  e.getMessage(), now);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBadRequestException(MethodArgumentNotValidException e) {
+        String reason = "Incorrectly made request.";
+        log.error(e.getMessage(), e);
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.name(), reason,  e.getMessage(), now);
+    }
+
+/*    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBadRequestException(Throwable e) {
+        String reason = "Incorrectly made request.";
+        log.error(e.getMessage(), e);
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.name(), reason,  e.getMessage(), now);
+    }*/
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleBadRequestException(HttpMessageNotReadableException e) {
+        String reason = "Incorrectly made request.";
+        log.error(e.getMessage(), e);
+        return new ErrorResponse(HttpStatus.BAD_REQUEST.name(), reason,  e.getMessage(), now);
     }
 }

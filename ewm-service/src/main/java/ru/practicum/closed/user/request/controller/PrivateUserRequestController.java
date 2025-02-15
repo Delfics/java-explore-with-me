@@ -2,6 +2,7 @@ package ru.practicum.closed.user.request.controller;
 
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.closed.user.request.mapper.ParticipationRequestMapper;
 import ru.practicum.closed.user.request.service.PrivateParticipationRequestService;
@@ -22,20 +23,22 @@ public class PrivateUserRequestController {
     @GetMapping("/{userId}/requests")
     public List<ParticipationRequestDto> getAllRequestsByUserId(@PathVariable("userId") Long userId) {
         return privateParticipationRequestService.findAllForUserOnOtherEvents(userId).stream()
-                .map(ParticipationRequestMapper::toDto)
+                .map(ParticipationRequestMapper::toParitcipationRequestDto)
                 .toList();
     }
-
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("/{userId}/requests")
     public ParticipationRequestDto createRequestByUserId(@PathVariable("userId") Long userId,
-                                                         @RequestBody ParticipationRequestDto requestDto) {
-        return ParticipationRequestMapper.toDto(privateParticipationRequestService
-                .create(ParticipationRequestMapper.fromDto(requestDto)));
+                                                         @RequestParam ("eventId") Long eventId) {
+        return ParticipationRequestMapper.toParitcipationRequestDto(privateParticipationRequestService
+                .create(userId, eventId));
 
     }
 
     @PatchMapping("/{userId}/requests/{requestId}/cancel")
-    public void patchRequestCancel(@PathVariable("userId") Long userId, @PathVariable("requestId") Long requestId) {
-        privateParticipationRequestService.delete(userId, requestId);
+    public ParticipationRequestDto patchRequestCancel(@PathVariable("userId") Long userId,
+                                                      @PathVariable("requestId") Long requestId) {
+      return ParticipationRequestMapper.toParitcipationRequestDto(privateParticipationRequestService
+               .cancelRequest(userId, requestId));
     }
 }

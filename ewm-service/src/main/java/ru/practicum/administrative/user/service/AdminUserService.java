@@ -6,6 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.administrative.user.model.User;
 import ru.practicum.administrative.user.repository.AdminUserStorage;
+import ru.practicum.exception.BadRequestException;
+import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
 
 import java.util.List;
@@ -29,6 +31,11 @@ public class AdminUserService {
     }
 
     public User create(User user) {
+       if (user.getName() == null || user.getName().isBlank() || user.getName().isEmpty()) {
+            throw new BadRequestException("name must not be null or empty or blank");
+        } else if (user.getEmail() == null || user.getEmail().isBlank() || user.getEmail().isEmpty()) {
+            throw new BadRequestException("email must not be null or empty or blank");
+        }
         return adminUserStorage.save(user);
     }
 
@@ -36,6 +43,14 @@ public class AdminUserService {
         if (adminUserStorage.findById(id).isPresent()) {
             adminUserStorage.deleteById(id);
             log.debug("Deleted user with id {} successful", id);
+        } else {
+            throw new NotFoundException("User with id=" + id + " was not found");
+        }
+    }
+
+    public User findById(Long id) {
+        if (adminUserStorage.findById(id).isPresent()) {
+            return adminUserStorage.findById(id).get();
         } else {
             throw new NotFoundException("User with id=" + id + " was not found");
         }
