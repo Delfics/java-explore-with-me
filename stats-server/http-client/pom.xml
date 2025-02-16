@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>ru.practicum</groupId>
-        <artifactId>explore-with-me</artifactId>
+        <artifactId>stats-server</artifactId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
@@ -76,7 +76,7 @@
         </dependency>
         <dependency>
             <groupId>ru.practicum</groupId>
-            <artifactId>dtoall</artifactId>
+            <artifactId>dto-stats</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>

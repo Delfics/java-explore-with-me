@@ -29,7 +29,7 @@ public class ViewStatsService {
             return endpointHitStorageJpa.getStatsBetweenStartAndEnd(start, end);
         } else if (uris == null && !unique) {
             return endpointHitStorageJpa.getStatsBetweenStartAndEnd(start, end);
-        }  else if (uris != null && !uris.isEmpty() && unique == null) {
+        } else if (uris != null && !uris.isEmpty() && unique == null) {
             return endpointHitStorageJpa.getStatsWithUris(start, end, uris);
         } else if (uris != null && !uris.isEmpty() && !unique) {
             return endpointHitStorageJpa.getStatsWithUris(start, end, uris);
