@@ -6,5 +6,5 @@ import java.time.format.DateTimeFormatter;
 
 @UtilityClass
 public class Utils {
-    public final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    public final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 }

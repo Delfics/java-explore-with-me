@@ -39,7 +39,7 @@ public class AdminEventService {
 
     public List<Event> findAll(List<Long> users, List<String> states, List<Long> categories,
                                String rangeStart, String rangeEnd, Integer from, Integer size) {
-        DateTimeFormatter formatter = Utils.DATE_TIME_FORMATTER;
+        DateTimeFormatter formatter = Utils.dateTimeFormatter;
         LocalDateTime rangeStartParsed = null;
         LocalDateTime rangeEndParsed = null;
         boolean hasCondition = false;

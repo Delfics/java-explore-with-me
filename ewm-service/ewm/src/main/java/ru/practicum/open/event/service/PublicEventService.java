@@ -38,7 +38,7 @@ public class PublicEventService {
     public List<Event> findAllEvents(String text, List<Long> categories, Boolean paid, String rangeStart,
                                      String rangeEnd, Boolean onlyAvailable, String sort, Integer from, Integer size,
                                      HttpServletRequest request) throws Exception {
-        DateTimeFormatter formatter = Utils.DATE_TIME_FORMATTER;
+        DateTimeFormatter formatter = Utils.dateTimeFormatter;
         LocalDateTime rangeStartParsed = null;
         LocalDateTime rangeEndParsed = null;
 
