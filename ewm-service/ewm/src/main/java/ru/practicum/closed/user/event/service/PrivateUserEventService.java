@@ -165,9 +165,7 @@ public class PrivateUserEventService {
                     throw new ConflictException("Participant limit is full");
                 }
             }
-            List<ParticipationRequest> requestsByEventId = privateParticipationRequestService.findRequestsByEventId(eventId);
             ArrayList<Long> requestIds = patchRequest.getRequestIds();
-            // Нет лимита заявок или отключена пре-модерация (не требуется подтверждение заявок)
             if (event.getParticipantLimit() == zero || !event.getRequestModeration()) {
                 for (Long requestId : requestIds) {
                     ParticipationRequest request = privateParticipationRequestService.findById(requestId);
@@ -182,14 +180,13 @@ public class PrivateUserEventService {
             } else if (event.getParticipantLimit() > zero && event.getRequestModeration()) {
                 int count = 0;
                 for (Long requestId : requestIds) {
-                    ParticipationRequest request = privateParticipationRequestService.findById
-                            (requestId);
+                    ParticipationRequest request = privateParticipationRequestService.findById(
+                            requestId);
 
                     if (count >= event.getParticipantLimit()) {
                         throw new ConflictException("Participant limit reached");
                     }
 
-                    // Проверка: заявка должна быть в статусе PENDING
                     if (request == null || !request.getStatus().equals(Status.PENDING)) {
                         throw new BadRequestException("Request must have status PENDING");
                     }

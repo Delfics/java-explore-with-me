@@ -51,8 +51,8 @@ public class PrivateParticipationRequestService {
         if (event == null) {
             throw new NotFoundException("Event with id=" + eventId + " was not found");
         }
-        ParticipationRequest request = privateParticipationRequestStorage.
-                findRequestByRequesterIdAndEventId(userId, eventId);
+        ParticipationRequest request = privateParticipationRequestStorage
+                .findRequestByRequesterIdAndEventId(userId, eventId);
         if (Objects.equals(event.getInitiator().getId(), userId)) {
             throw new ConflictException("Initiator can't make request in himself Event");
         }
@@ -96,8 +96,8 @@ public class PrivateParticipationRequestService {
     }
 
     public ParticipationRequest cancelRequest(Long userId, Long requestId) {
-        ParticipationRequest request = privateParticipationRequestStorage.
-                findRequestByRequesterIdAndRequestId(userId, requestId);
+        ParticipationRequest request = privateParticipationRequestStorage
+                .findRequestByRequesterIdAndRequestId(userId, requestId);
         if (request == null) {
             throw new NotFoundException("Request with id=" + requestId + " was not found");
         }

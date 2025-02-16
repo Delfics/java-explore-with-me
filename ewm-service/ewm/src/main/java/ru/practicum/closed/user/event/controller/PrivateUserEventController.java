@@ -72,8 +72,8 @@ public class PrivateUserEventController {
     public EventRequestStatusUpdateResult patchRequestsByInitiatorIdAndEventId(@PathVariable("userId") Long initiatorId,
                                                                                @PathVariable("eventId") Long eventId,
                                                                                @RequestBody EventRequestStatusUpdateRequestDto eventRequestStatusUpdateRequestDto) {
-        return privateUserEventService.patchRequestsByUserIdAndEventId
-                (initiatorId, eventId, eventRequestStatusUpdateRequestDto);
+        return privateUserEventService.patchRequestsByUserIdAndEventId(
+                initiatorId, eventId, eventRequestStatusUpdateRequestDto);
 
     }
 }
