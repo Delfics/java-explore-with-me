@@ -1,7 +1,7 @@
 services:
   stats-server:
     build:
-      context: ./stats-server
+      context: ./stats-server/stats-service-server
     ports:
       - "9090:9090"
     depends_on:
@@ -24,7 +24,7 @@ services:
 
   ewm-service:
     build:
-      context: ./ewm-service
+      context: ./ewm-service/ewm
     ports:
       - "8080:8080"
     depends_on:
