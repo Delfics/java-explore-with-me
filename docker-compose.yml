@@ -6,8 +6,6 @@ services:
       - "9090:9090"
     depends_on:
       - stats-db
-    networks:
-      - app_network
 
   stats-db:
     image: postgres:16.1
@@ -23,9 +21,6 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
-    networks:
-      - app_network
-
 
   ewm-service:
     build:
@@ -34,8 +29,6 @@ services:
       - "8080:8080"
     depends_on:
       - ewm-db
-    networks:
-    - app_network
 
   ewm-db:
     image: postgres:16.1
@@ -51,9 +44,3 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
-    networks:
-        - app_network
-
-networks:
-  app_network:
-    driver: bridge
