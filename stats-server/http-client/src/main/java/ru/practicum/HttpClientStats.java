@@ -3,6 +3,7 @@ package ru.practicum;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import ru.practicum.config.JacksonConfig;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
@@ -18,12 +19,12 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
-
+@Slf4j
 @AllArgsConstructor
 public class HttpClientStats {
     private static final HttpClient httpClient = HttpClient.newHttpClient();
     @Value("${url}")
-    private final String url;
+    String url;
     private static final String endpointStats = "/stats";
     private static final String endpointHits = "/hit";
     private final ObjectMapper objectMapper = JacksonConfig.objectMapper();

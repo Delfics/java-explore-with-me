@@ -1,6 +1,8 @@
 package ru.practicum.util;
 
-import lombok.experimental.UtilityClass;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import ru.practicum.HttpClientStats;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
@@ -9,11 +11,14 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
-@UtilityClass
+@Slf4j
+@Component
 public class ViewsEvent {
-    private final String url = "http://localhost:9090";
+    @Value("${url}")
+    private String url;
 
     public EndpointHitDto createRequestEndpointHitDto(String app, String requestUri, String remoteAddr) throws Exception {
+        log.info("String - app={} requestUri={} remoteAddr={}", app, requestUri, remoteAddr);
         EndpointHitDto endpointHitDto = new EndpointHitDto();
         endpointHitDto.setApp(app);
         endpointHitDto.setUri(requestUri);

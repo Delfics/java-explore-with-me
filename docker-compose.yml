@@ -1,3 +1,9 @@
+version: '3.8'
+
+networks:
+  my_network:
+    driver: bridge
+
 services:
   stats-server:
     build:
@@ -6,6 +12,8 @@ services:
       - "9090:9090"
     depends_on:
       - stats-db
+    networks:
+      - my_network
 
   stats-db:
     image: postgres:16.1
@@ -17,18 +25,24 @@ services:
       - POSTGRES_USER=stats-server
       - POSTGRES_DB=stats-server
     healthcheck:
-      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      test: ["CMD-SHELL", "pg_isready -q -d $POSTGRES_DB -U $POSTGRES_USER"]
       timeout: 5s
       interval: 5s
       retries: 10
+    networks:
+      - my_network
 
   ewm-service:
     build:
       context: ./ewm-service/ewm
     ports:
       - "8080:8080"
+      - "6565:6565"
     depends_on:
       - ewm-db
+      - stats-server
+    networks:
+      - my_network
 
   ewm-db:
     image: postgres:16.1
@@ -40,7 +54,9 @@ services:
       - POSTGRES_USER=ewm-service
       - POSTGRES_DB=ewm-service
     healthcheck:
-      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      test: ["CMD-SHELL", "pg_isready -q -d $POSTGRES_DB -U $POSTGRES_USER"]
       timeout: 5s
       interval: 5s
       retries: 10
+    networks:
+      - my_network

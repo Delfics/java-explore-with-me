@@ -27,12 +27,14 @@ public class PublicEventService {
     private final PrivateEventStorage privateEventStorage;
     private final EntityManager entityManager;
     private final PublicCategoryStorage publicCategoryStorage;
+    private final ViewsEvent viewsEvent;
 
     public PublicEventService(PrivateEventStorage privateEventStorage, EntityManager entityManager,
-                              PublicCategoryStorage publicCategoryStorage) {
+                              PublicCategoryStorage publicCategoryStorage, ViewsEvent viewsEvent) {
         this.privateEventStorage = privateEventStorage;
         this.entityManager = entityManager;
         this.publicCategoryStorage = publicCategoryStorage;
+        this.viewsEvent = viewsEvent;
     }
 
     public List<Event> findAllEvents(String text, List<Long> categories, Boolean paid, String rangeStart,
@@ -103,7 +105,7 @@ public class PublicEventService {
         typedQuery.setFirstResult(from);
         typedQuery.setMaxResults(size);
 
-        ViewsEvent.createRequestEndpointHitDto(app, request.getRequestURI(),
+        viewsEvent.createRequestEndpointHitDto(app, request.getRequestURI(),
                 request.getRemoteAddr());
 
         typedQuery.getResultList()
@@ -128,10 +130,10 @@ public class PublicEventService {
         if (byEventId == null || byEventId.getState() != State.PUBLISHED) {
             throw new NotFoundException("Event with id=" + eventId + " was not found");
         } else {
-            EndpointHitDto endpointHitDto = ViewsEvent.createRequestEndpointHitDto(app, request.getRequestURI(),
+            EndpointHitDto endpointHitDto = viewsEvent.createRequestEndpointHitDto(app, request.getRequestURI(),
                     request.getRemoteAddr());
 
-            Long views = ViewsEvent.getViewsWithUniqueForEventByEventIdAndCreatedOn(byEventId.getId(),
+            Long views = viewsEvent.getViewsWithUniqueForEventByEventIdAndCreatedOn(byEventId.getId(),
                     byEventId.getViews(), byEventId.getCreatedOn(), endpointHitDto.getUri(), unique);
 
             byEventId.setViews(views);
