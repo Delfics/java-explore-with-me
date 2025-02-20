@@ -3,6 +3,7 @@ package ru.practicum;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import ru.practicum.config.JacksonConfig;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.dto.ViewStatsDto;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,14 +18,15 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 
+
 @AllArgsConstructor
 public class HttpClientStats {
     private static final HttpClient httpClient = HttpClient.newHttpClient();
     @Value("${url}")
     private final String url;
     private static final String endpointStats = "/stats";
-    private static final String endpointHits = "/hits";
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private static final String endpointHits = "/hit";
+    private final ObjectMapper objectMapper = JacksonConfig.objectMapper();
 
     public EndpointHitDto sendCreateEndpointHit(EndpointHitDto endpointHitDto) throws Exception {
         String request = objectMapper.writeValueAsString(endpointHitDto);
@@ -36,7 +38,7 @@ public class HttpClientStats {
                 .build();
 
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
+        System.out.println("Response body: " + httpResponse.body());
         return objectMapper.readValue(httpResponse.body(), EndpointHitDto.class);
     }
 
