@@ -76,7 +76,6 @@ public class PublicEventService {
             query.append(" AND e.participantLimit > e.confirmedRequests");
         }
 
-        // Добавляем сортировку
         if (sort != null && !sort.isEmpty()) {
             if (sort.equals("eventDate")) {
                 query.append(" ORDER BY e.eventDate");
@@ -104,6 +103,9 @@ public class PublicEventService {
         typedQuery.setFirstResult(from);
         typedQuery.setMaxResults(size);
 
+        ViewsEvent.createRequestEndpointHitDto(app, request.getRequestURI(),
+                request.getRemoteAddr());
+
         typedQuery.getResultList()
                 .forEach(e -> {
                     if (e.getState() != State.PUBLISHED) {
@@ -116,9 +118,6 @@ public class PublicEventService {
             event.setViews(views);
             privateEventStorage.save(event);
         }
-
-        ViewsEvent.createRequestEndpointHitDto(app, request.getRequestURI(),
-                request.getRemoteAddr());
 
         return typedQuery.getResultList();
     }
