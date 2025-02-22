@@ -1,4 +1,4 @@
-package ru.practicum.administrative.compilation.model;
+package ru.practicum.dto;
 
 import lombok.Data;
 

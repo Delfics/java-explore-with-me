@@ -3,7 +3,7 @@ package ru.practicum.open.event.controller;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.closed.user.event.mapper.EventMapper;
+import ru.practicum.mapper.EventMapper;
 import ru.practicum.dto.EventFullDto;
 import ru.practicum.dto.EventShortDto;
 import ru.practicum.open.event.service.PublicEventService;

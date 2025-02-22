@@ -1,7 +1,7 @@
-package ru.practicum.closed.user.request.mapper;
+package ru.practicum.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.closed.user.request.model.ParticipationRequest;
+import ru.practicum.model.ParticipationRequest;
 import ru.practicum.dto.ParticipationRequestDto;
 
 @UtilityClass

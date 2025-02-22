@@ -4,12 +4,12 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.closed.user.event.mapper.EventMapper;
-import ru.practicum.closed.user.event.model.Event;
-import ru.practicum.closed.user.event.model.EventRequestStatusUpdateResult;
-import ru.practicum.closed.user.event.model.UpdateEventUserRequest;
+import ru.practicum.mapper.EventMapper;
+import ru.practicum.model.Event;
+import ru.practicum.model.EventRequestStatusUpdateResult;
+import ru.practicum.model.UpdateEventUserRequest;
 import ru.practicum.closed.user.event.service.PrivateUserEventService;
-import ru.practicum.closed.user.request.mapper.ParticipationRequestMapper;
+import ru.practicum.mapper.ParticipationRequestMapper;
 import ru.practicum.closed.user.request.service.PrivateParticipationRequestService;
 import ru.practicum.dto.*;
 

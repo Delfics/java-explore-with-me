@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.exception.NotFoundException;
-import ru.practicum.open.compilation.model.Compilation;
+import ru.practicum.model.Compilation;
 import ru.practicum.open.compilation.repository.PublicCompilationStorage;
 
 import java.util.List;
@@ -22,7 +22,7 @@ public class PublicCompilationService {
     public List<Compilation> findAllPinedSortedFromAndSize(Boolean pined, Long from, Long size) {
         Pageable pageable = PageRequest.of(from.intValue(), size.intValue());
         if (pined != null && pined) {
-            return publicCompilationStorage.findAllPinedSortedFromAndSize(pined, pageable);
+            return publicCompilationStorage.findAllPinedSortedFromAndSize(true, pageable);
         } else {
             return publicCompilationStorage.findAllSortedFromAndSize(pageable);
         }

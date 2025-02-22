@@ -2,9 +2,9 @@ package ru.practicum.administrative.event.controller;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.administrative.event.model.UpdateEventAdminRequest;
+import ru.practicum.dto.UpdateEventAdminRequest;
 import ru.practicum.administrative.event.service.AdminEventService;
-import ru.practicum.closed.user.event.mapper.EventMapper;
+import ru.practicum.mapper.EventMapper;
 import ru.practicum.dto.EventFullDto;
 
 import java.util.List;

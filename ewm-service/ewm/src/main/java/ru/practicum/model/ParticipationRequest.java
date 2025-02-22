@@ -1,13 +1,18 @@
-package ru.practicum.closed.user.request.model;
+package ru.practicum.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import ru.practicum.enums.Status;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @Entity
 public class ParticipationRequest {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -27,4 +32,17 @@ public class ParticipationRequest {
 
     @Column(name = "status")
     private Status status;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParticipationRequest participationRequest = (ParticipationRequest) o;
+        return Objects.equals(id, participationRequest.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

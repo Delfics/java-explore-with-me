@@ -1,7 +1,6 @@
-package ru.practicum.closed.user.event.model;
+package ru.practicum.model;
 
 import lombok.Data;
-import ru.practicum.closed.user.request.model.ParticipationRequest;
 
 import java.util.ArrayList;
 import java.util.List;

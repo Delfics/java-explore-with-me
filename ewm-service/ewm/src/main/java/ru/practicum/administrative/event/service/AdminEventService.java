@@ -5,8 +5,8 @@ import jakarta.persistence.TypedQuery;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.util.Utils;
-import ru.practicum.administrative.event.model.UpdateEventAdminRequest;
-import ru.practicum.closed.user.event.model.Event;
+import ru.practicum.dto.UpdateEventAdminRequest;
+import ru.practicum.model.Event;
 import ru.practicum.closed.user.event.repository.PrivateEventStorage;
 import ru.practicum.closed.user.event.service.PrivateUserEventService;
 import ru.practicum.exception.BadRequestException;
@@ -104,56 +104,50 @@ public class AdminEventService {
 
     public Event updateEventAdminRequest(Long eventId, UpdateEventAdminRequest updateEventAdminRequest) {
         Event byEventId = privateUserEventService.findByEventId(eventId);
-        if (byEventId.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
-            throw new BadRequestException(("Field: eventDate. Error: должно содержать дату, которая еще не наступила " +
-                    "или за 1 час от публикации"));
-        }
-        if (updateEventAdminRequest.getEventDate() != null) {
-            if (updateEventAdminRequest.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
-                throw new BadRequestException("Field: eventDate. при обновлении должно содержать дату," +
-                        " которая еще не наступила или за 1 час от публикации");
-            }
-        }
-        if (updateEventAdminRequest.getStateAction() != null) {
-            if (byEventId.getState().equals(State.PENDING) &&
-                    updateEventAdminRequest.getStateAction().equals(StateAction.PUBLISH_EVENT)) {
-                byEventId.setState(State.PUBLISHED);
-            } else if ((byEventId.getState().equals(State.CANCELED) || byEventId.getState().equals(State.PENDING)) &&
-                    updateEventAdminRequest.getStateAction().equals(StateAction.REJECT_EVENT)) {
-                byEventId.setState(State.CANCELED);
-            } else {
-                throw new ConflictException("Cannot publish the event because it's not in the right state: PUBLISHED");
-            }
-        }
-        if (updateEventAdminRequest.getAnnotation() != null) {
-            byEventId.setAnnotation(updateEventAdminRequest.getAnnotation());
-        }
-        if (updateEventAdminRequest.getCategory() != null) {
-            byEventId.setCategory(publicCategoryService.findById(updateEventAdminRequest.getCategory()));
-        }
-        if (updateEventAdminRequest.getDescription() != null) {
-            byEventId.setDescription(updateEventAdminRequest.getDescription());
-        }
-        if (updateEventAdminRequest.getEventDate() != null) {
-            byEventId.setEventDate(updateEventAdminRequest.getEventDate());
-        }
-        if (updateEventAdminRequest.getLocation() != null) {
-            byEventId.setLocation(updateEventAdminRequest.getLocation());
-        }
-        if (updateEventAdminRequest.getPaid() != null) {
-            byEventId.setPaid(updateEventAdminRequest.getPaid());
-        }
-        if (updateEventAdminRequest.getParticipantLimit() != null) {
-            byEventId.setParticipantLimit(updateEventAdminRequest.getParticipantLimit());
-        }
+
+        validateEventDate(byEventId, updateEventAdminRequest.getEventDate());
+
+        updateEventState(byEventId, updateEventAdminRequest.getStateAction());
+
+        updateEventFields(byEventId, updateEventAdminRequest);
+
         byEventId.setPublishedOn(LocalDateTime.now());
-        if (updateEventAdminRequest.getRequestModeration() != null) {
-            byEventId.setRequestModeration(updateEventAdminRequest.getRequestModeration());
-        }
-        if (updateEventAdminRequest.getTitle() != null) {
-            byEventId.setTitle(updateEventAdminRequest.getTitle());
-        }
+
         return privateEventStorage.save(byEventId);
+    }
+
+    private void validateEventDate(Event event, LocalDateTime newEventDate) {
+        if (event.getEventDate().isBefore(LocalDateTime.now().plusHours(1))) {
+            throw new BadRequestException("Field: eventDate. Должно быть хотя бы за 1 час до публикации.");
+        }
+        if (newEventDate != null && newEventDate.isBefore(LocalDateTime.now().plusHours(1))) {
+            throw new BadRequestException("Field: eventDate. При обновлении дата должна быть минимум за 1 час.");
+        }
+    }
+
+    private void updateEventState(Event event, StateAction stateAction) {
+        if (stateAction == null) return;
+
+        if (event.getState().equals(State.PENDING) && stateAction.equals(StateAction.PUBLISH_EVENT)) {
+            event.setState(State.PUBLISHED);
+        } else if ((event.getState().equals(State.CANCELED) || event.getState().equals(State.PENDING)) &&
+                stateAction.equals(StateAction.REJECT_EVENT)) {
+            event.setState(State.CANCELED);
+        } else {
+            throw new ConflictException("Cannot publish the event because it's not in the right state: PUBLISHED");
+        }
+    }
+
+    private void updateEventFields(Event event, UpdateEventAdminRequest request) {
+        if (request.getAnnotation() != null) event.setAnnotation(request.getAnnotation());
+        if (request.getCategory() != null) event.setCategory(publicCategoryService.findById(request.getCategory()));
+        if (request.getDescription() != null) event.setDescription(request.getDescription());
+        if (request.getEventDate() != null) event.setEventDate(request.getEventDate());
+        if (request.getLocation() != null) event.setLocation(request.getLocation());
+        if (request.getPaid() != null) event.setPaid(request.getPaid());
+        if (request.getParticipantLimit() != null) event.setParticipantLimit(request.getParticipantLimit());
+        if (request.getRequestModeration() != null) event.setRequestModeration(request.getRequestModeration());
+        if (request.getTitle() != null) event.setTitle(request.getTitle());
     }
 
     public void validateUpdateEventAdminRequest(UpdateEventAdminRequest updateEventAdminRequest) {

@@ -3,14 +3,14 @@ package ru.practicum.administrative.compilation.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.administrative.compilation.model.UpdateCompilationRequest;
-import ru.practicum.closed.user.event.model.Event;
-import ru.practicum.closed.user.event.repository.PrivateEventStorage;
+import ru.practicum.dto.UpdateCompilationRequest;
 import ru.practicum.dto.NewCompilationDto;
+import ru.practicum.model.Event;
+import ru.practicum.closed.user.event.repository.PrivateEventStorage;
 import ru.practicum.exception.BadRequestException;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
-import ru.practicum.open.compilation.model.Compilation;
+import ru.practicum.model.Compilation;
 import ru.practicum.open.compilation.repository.PublicCompilationStorage;
 
 import java.util.HashSet;

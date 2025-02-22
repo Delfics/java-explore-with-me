@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.administrative.category.service.AdminCategoryService;
 import ru.practicum.dto.NewCategoryDto;
-import ru.practicum.open.category.mapper.CategoryMapper;
+import ru.practicum.mapper.CategoryMapper;
 
 @RestController
 @Slf4j

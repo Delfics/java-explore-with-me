@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.exception.NotFoundException;
-import ru.practicum.open.category.model.Category;
+import ru.practicum.model.Category;
 import ru.practicum.open.category.repository.PublicCategoryStorage;
 
 import java.util.List;

@@ -3,7 +3,7 @@ package ru.practicum.open.compilation.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.CompilationDto;
-import ru.practicum.open.compilation.mapper.CompilationMapper;
+import ru.practicum.mapper.CompilationMapper;
 import ru.practicum.open.compilation.service.PublicCompilationService;
 
 import java.util.List;

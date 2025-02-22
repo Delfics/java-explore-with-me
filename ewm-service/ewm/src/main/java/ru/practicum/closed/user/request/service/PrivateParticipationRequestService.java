@@ -3,10 +3,10 @@ package ru.practicum.closed.user.request.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
-import ru.practicum.closed.user.event.model.Event;
+import ru.practicum.model.Event;
 import ru.practicum.closed.user.event.repository.PrivateEventStorage;
 import ru.practicum.closed.user.event.service.PrivateUserEventService;
-import ru.practicum.closed.user.request.model.ParticipationRequest;
+import ru.practicum.model.ParticipationRequest;
 import ru.practicum.closed.user.request.repository.PrivateParticipationRequestStorage;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
@@ -91,7 +91,7 @@ public class PrivateParticipationRequestService {
         return privateParticipationRequestStorage.findRequestsByInitiatorIdAndEventId(initiatorId, eventId);
     }
 
-    public ParticipationRequest update(Long requestId, ParticipationRequest participationRequest) {
+    public ParticipationRequest update(ParticipationRequest participationRequest) {
         return privateParticipationRequestStorage.save(participationRequest);
     }
 
@@ -105,9 +105,5 @@ public class PrivateParticipationRequestService {
             request.setStatus(Status.CANCELED);
         }
         return privateParticipationRequestStorage.save(request);
-    }
-
-    public List<ParticipationRequest> findRequestsByEventId(Long eventId) {
-        return privateParticipationRequestStorage.findRequestsByEventId(eventId);
     }
 }

@@ -6,14 +6,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.practicum.util.Utils;
-import ru.practicum.closed.user.event.model.Event;
+import ru.practicum.model.Event;
 import ru.practicum.closed.user.event.repository.PrivateEventStorage;
 import ru.practicum.dto.EndpointHitDto;
 import ru.practicum.exception.BadRequestException;
 import ru.practicum.exception.NotFoundException;
 import ru.practicum.open.category.repository.PublicCategoryStorage;
 import ru.practicum.enums.State;
-import ru.practicum.util.ViewsEvent;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;

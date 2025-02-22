@@ -1,4 +1,4 @@
-package ru.practicum.administrative.event.model;
+package ru.practicum.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -13,7 +13,6 @@ public class UpdateEventAdminRequest {
     private String annotation;
 
     private Long category;
-
 
     private String description;
 

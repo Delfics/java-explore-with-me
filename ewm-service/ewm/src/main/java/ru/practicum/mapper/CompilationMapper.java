@@ -1,9 +1,8 @@
-package ru.practicum.open.compilation.mapper;
+package ru.practicum.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.closed.user.event.mapper.EventMapper;
 import ru.practicum.dto.CompilationDto;
-import ru.practicum.open.compilation.model.Compilation;
+import ru.practicum.model.Compilation;
 
 import java.util.List;
 

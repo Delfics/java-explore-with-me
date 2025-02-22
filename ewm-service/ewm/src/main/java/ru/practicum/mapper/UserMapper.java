@@ -1,7 +1,7 @@
-package ru.practicum.administrative.user.mapper;
+package ru.practicum.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.administrative.user.model.User;
+import ru.practicum.model.User;
 import ru.practicum.dto.UserDto;
 import ru.practicum.dto.UserShortDto;
 

@@ -1,10 +1,9 @@
-package ru.practicum.closed.user.event.model;
+package ru.practicum.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import ru.practicum.model.Location;
-import ru.practicum.open.category.model.Category;
 import ru.practicum.enums.StateAction;
 
 import java.time.LocalDateTime;

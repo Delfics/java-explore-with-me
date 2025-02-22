@@ -4,7 +4,7 @@ package ru.practicum.open.category.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.dto.NewCategoryDto;
-import ru.practicum.open.category.mapper.CategoryMapper;
+import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.open.category.service.PublicCategoryService;
 
 import java.util.List;

@@ -5,11 +5,11 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.administrative.compilation.model.UpdateCompilationRequest;
 import ru.practicum.administrative.compilation.service.AdminCompilationService;
 import ru.practicum.dto.CompilationDto;
+import ru.practicum.dto.UpdateCompilationRequest;
 import ru.practicum.dto.NewCompilationDto;
-import ru.practicum.open.compilation.mapper.CompilationMapper;
+import ru.practicum.mapper.CompilationMapper;
 
 @RestController
 @Slf4j
@@ -35,7 +35,7 @@ public class AdminCompilationController {
 
     @PatchMapping("/{compId}")
     public CompilationDto patch(@PathVariable Long compId,
-                                @RequestBody @Valid UpdateCompilationRequest updateCompilationRequest) {
+                                @RequestBody UpdateCompilationRequest updateCompilationRequest) {
         adminCompilationService.validateUpdateCompilationRequest(updateCompilationRequest);
         return CompilationMapper.toCompilationDto(adminCompilationService.patch(compId, updateCompilationRequest));
     }

@@ -1,7 +1,7 @@
-package ru.practicum.util;
+package ru.practicum.open.event.service;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.practicum.HttpClientStats;
 import ru.practicum.dto.EndpointHitDto;
@@ -14,8 +14,12 @@ import java.util.Objects;
 @Slf4j
 @Component
 public class ViewsEvent {
-    @Value("${url}")
-    private String url;
+   private final HttpClientStats clientStats;
+
+    @Autowired
+    public ViewsEvent(HttpClientStats clientStats) {
+        this.clientStats = clientStats;
+    }
 
     public EndpointHitDto createRequestEndpointHitDto(String app, String requestUri, String remoteAddr) throws Exception {
         log.info("String - app={} requestUri={} remoteAddr={}", app, requestUri, remoteAddr);
@@ -24,8 +28,7 @@ public class ViewsEvent {
         endpointHitDto.setUri(requestUri);
         endpointHitDto.setIp(remoteAddr);
         endpointHitDto.setTimestamp(LocalDateTime.now());
-        HttpClientStats httpClientStats = new HttpClientStats(url);
-        httpClientStats.sendCreateEndpointHit(endpointHitDto);
+        clientStats.sendCreateEndpointHit(endpointHitDto);
         return endpointHitDto;
     }
 
@@ -33,11 +36,10 @@ public class ViewsEvent {
                                                                 String uri, Boolean unique) throws Exception {
         Long zero = 0L;
         String uriEvent = "/events/" + eventId;
-        HttpClientStats httpClientStats = new HttpClientStats(url);
-        List<ViewStatsDto> viewStatsDtos = httpClientStats.sendGetViewStatsWithUnique(createdOn, LocalDateTime.now(),
-                unique);
+        List<ViewStatsDto> viewStatsDtos = clientStats.sendGetViewStatsWithUnique(createdOn, LocalDateTime.now(),
+                        unique);
         if (!viewStatsDtos.isEmpty()) {
-            ViewStatsDto viewStatsDto = viewStatsDtos.get(0);
+            ViewStatsDto viewStatsDto = viewStatsDtos.getFirst();
             if (viewStatsDto.getUri().equals(uriEvent)) {
                 if (!Objects.equals(viewStatsDto.getHits(), viewEvents) && viewEvents.equals(zero)) {
                     return viewStatsDto.getHits();

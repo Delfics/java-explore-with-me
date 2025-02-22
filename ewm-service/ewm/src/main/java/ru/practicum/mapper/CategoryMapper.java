@@ -1,8 +1,8 @@
-package ru.practicum.open.category.mapper;
+package ru.practicum.mapper;
 
 import lombok.experimental.UtilityClass;
 import ru.practicum.dto.NewCategoryDto;
-import ru.practicum.open.category.model.Category;
+import ru.practicum.model.Category;
 
 @UtilityClass
 public class CategoryMapper {

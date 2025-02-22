@@ -16,7 +16,7 @@ import java.time.format.DateTimeFormatter;
 
 @RestControllerAdvice
 @Slf4j
-public class ExceptionControlHandlerEwm {
+public class ExceptionControlHandler {
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     String now = LocalDateTime.now().format(formatter);
 
@@ -26,7 +26,6 @@ public class ExceptionControlHandlerEwm {
         String reason = "The required object was not found.";
         log.error(e.getMessage(), e);
         return new ErrorResponse(HttpStatus.NOT_FOUND.name(), reason, e.getMessage(), now);
-
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -45,7 +44,10 @@ public class ExceptionControlHandlerEwm {
         return new ErrorResponse(HttpStatus.CONFLICT.name(), reason, e.getMessage(), now);
     }
 
-    @ExceptionHandler
+    @ExceptionHandler({BadRequestException.class,
+            MethodArgumentTypeMismatchException.class,
+            MethodArgumentNotValidException.class,
+            HttpMessageNotReadableException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequestException(BadRequestException e) {
         String reason = "Incorrectly made request.";
@@ -53,27 +55,11 @@ public class ExceptionControlHandlerEwm {
         return new ErrorResponse(HttpStatus.BAD_REQUEST.name(), reason, e.getMessage(), now);
     }
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleBadRequestException(MethodArgumentTypeMismatchException e) {
-        String reason = "Incorrectly made request.";
+    @ExceptionHandler(InternalServerErrorException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleInternalServerErrorException(InternalServerErrorException e) {
+        String reason = "Internal server error.";
         log.error(e.getMessage(), e);
-        return new ErrorResponse(HttpStatus.BAD_REQUEST.name(), reason, e.getMessage(), now);
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleBadRequestException(MethodArgumentNotValidException e) {
-        String reason = "Incorrectly made request.";
-        log.error(e.getMessage(), e);
-        return new ErrorResponse(HttpStatus.BAD_REQUEST.name(), reason, e.getMessage(), now);
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleBadRequestException(HttpMessageNotReadableException e) {
-        String reason = "Incorrectly made request.";
-        log.error(e.getMessage(), e);
-        return new ErrorResponse(HttpStatus.BAD_REQUEST.name(), reason, e.getMessage(), now);
+        return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.name(), reason, e.getMessage(), now);
     }
 }

@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import ru.practicum.administrative.user.model.User;
+import ru.practicum.model.User;
 import ru.practicum.administrative.user.repository.AdminUserStorage;
 import ru.practicum.exception.BadRequestException;
 import ru.practicum.exception.NotFoundException;

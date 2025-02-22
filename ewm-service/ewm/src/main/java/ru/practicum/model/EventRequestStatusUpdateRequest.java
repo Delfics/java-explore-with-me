@@ -1,4 +1,4 @@
-package ru.practicum.closed.user.event.model;
+package ru.practicum.model;
 
 import lombok.Data;
 import ru.practicum.enums.Status;

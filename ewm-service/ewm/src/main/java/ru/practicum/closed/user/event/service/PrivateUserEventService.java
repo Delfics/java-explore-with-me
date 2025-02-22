@@ -5,21 +5,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.administrative.user.model.User;
+import ru.practicum.model.User;
 import ru.practicum.administrative.user.service.AdminUserService;
-import ru.practicum.closed.user.event.mapper.EventMapper;
-import ru.practicum.closed.user.event.model.Event;
-import ru.practicum.closed.user.event.model.EventRequestStatusUpdateResult;
-import ru.practicum.closed.user.event.model.UpdateEventUserRequest;
+import ru.practicum.mapper.EventMapper;
+import ru.practicum.model.Event;
+import ru.practicum.model.EventRequestStatusUpdateResult;
+import ru.practicum.model.UpdateEventUserRequest;
 import ru.practicum.closed.user.event.repository.PrivateEventStorage;
-import ru.practicum.closed.user.request.model.ParticipationRequest;
+import ru.practicum.model.ParticipationRequest;
 import ru.practicum.closed.user.request.service.PrivateParticipationRequestService;
 import ru.practicum.dto.EventRequestStatusUpdateRequestDto;
 import ru.practicum.dto.NewEventDto;
 import ru.practicum.exception.BadRequestException;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
-import ru.practicum.open.category.model.Category;
+import ru.practicum.model.Category;
 import ru.practicum.open.category.service.PublicCategoryService;
 import ru.practicum.enums.State;
 import ru.practicum.enums.StateAction;
@@ -171,13 +171,13 @@ public class PrivateUserEventService {
                     ParticipationRequest request = privateParticipationRequestService.findById(requestId);
                     if (request != null && request.getId().equals(requestId)) {
                         request.setStatus(Status.CONFIRMED);
-                        ParticipationRequest update = privateParticipationRequestService.update(requestId, request);
+                        ParticipationRequest update = privateParticipationRequestService.update(request);
                         result.getConfirmedRequests().add(update);
                     } else {
                         throw new NotFoundException("Request with id=" + requestId + " was not found");
                     }
                 }
-            } else if (event.getParticipantLimit() > zero && event.getRequestModeration()) {
+            } else if (event.getParticipantLimit() > zero) {
                 int count = 0;
                 for (Long requestId : requestIds) {
                     ParticipationRequest request = privateParticipationRequestService.findById(
@@ -193,11 +193,11 @@ public class PrivateUserEventService {
 
                     if (patchRequest.getStatus().equals(Status.REJECTED)) {
                         request.setStatus(Status.REJECTED);
-                        ParticipationRequest update = privateParticipationRequestService.update(requestId, request);
+                        ParticipationRequest update = privateParticipationRequestService.update(request);
                         result.getRejectedRequests().add(update);
                     } else if (patchRequest.getStatus().equals(Status.CONFIRMED)) {
                         request.setStatus(Status.CONFIRMED);
-                        ParticipationRequest update = privateParticipationRequestService.update(requestId, request);
+                        ParticipationRequest update = privateParticipationRequestService.update(request);
                         result.getConfirmedRequests().add(update);
                     }
                     count++;
@@ -209,7 +209,7 @@ public class PrivateUserEventService {
                                 .findById(requestId);
                         if (request != null && request.getStatus() == Status.PENDING) {
                             request.setStatus(Status.REJECTED);
-                            ParticipationRequest update = privateParticipationRequestService.update(requestId, request);
+                            ParticipationRequest update = privateParticipationRequestService.update(request);
                             result.getRejectedRequests().add(update);
                         }
                     }

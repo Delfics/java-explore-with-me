@@ -1,14 +1,14 @@
-package ru.practicum.closed.user.event.mapper;
+package ru.practicum.mapper;
 
 import lombok.experimental.UtilityClass;
-import ru.practicum.administrative.user.mapper.UserMapper;
-import ru.practicum.administrative.user.model.User;
-import ru.practicum.closed.user.event.model.Event;
+import ru.practicum.mapper.UserMapper;
+import ru.practicum.model.User;
+import ru.practicum.model.Event;
 import ru.practicum.dto.EventFullDto;
 import ru.practicum.dto.EventShortDto;
 import ru.practicum.dto.NewEventDto;
-import ru.practicum.open.category.mapper.CategoryMapper;
-import ru.practicum.open.category.model.Category;
+import ru.practicum.mapper.CategoryMapper;
+import ru.practicum.model.Category;
 import ru.practicum.enums.State;
 
 import java.time.LocalDateTime;
