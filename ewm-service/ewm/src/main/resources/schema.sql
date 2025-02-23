@@ -29,7 +29,6 @@ CREATE TABLE IF NOT EXISTS events (
     request_moderation BOOLEAN NOT NULL,
     states varchar(255) NOT NULL,
     title varchar(120) NOT NULL,
-    views BIGINT NOT NULL,
     CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE,
     CONSTRAINT fk_initiator FOREIGN KEY (initiator_id) REFERENCES users(id) ON DELETE CASCADE
 );

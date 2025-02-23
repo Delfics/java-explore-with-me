@@ -9,12 +9,11 @@ import ru.practicum.dto.ViewStatsDto;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 
 @Slf4j
 @Component
 public class ViewsEvent {
-   private final HttpClientStats clientStats;
+    private final HttpClientStats clientStats;
 
     @Autowired
     public ViewsEvent(HttpClientStats clientStats) {
@@ -37,21 +36,11 @@ public class ViewsEvent {
         Long zero = 0L;
         String uriEvent = "/events/" + eventId;
         List<ViewStatsDto> viewStatsDtos = clientStats.sendGetViewStatsWithUnique(createdOn, LocalDateTime.now(),
-                        unique);
+                unique);
         if (!viewStatsDtos.isEmpty()) {
             ViewStatsDto viewStatsDto = viewStatsDtos.getFirst();
             if (viewStatsDto.getUri().equals(uriEvent)) {
-                if (!Objects.equals(viewStatsDto.getHits(), viewEvents) && viewEvents.equals(zero)) {
-                    return viewStatsDto.getHits();
-                }
-                if (viewEvents > viewStatsDto.getHits()) {
-                    viewEvents = viewEvents - viewStatsDto.getHits();
-                    return viewEvents;
-                }
-                if (viewEvents.equals(viewStatsDto.getHits())) {
-                    return viewStatsDto.getHits();
-                }
-                return zero;
+                return viewStatsDto.getHits();
             } else {
                 return zero;
             }

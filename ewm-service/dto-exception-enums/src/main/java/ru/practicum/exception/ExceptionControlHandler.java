@@ -1,10 +1,13 @@
 package ru.practicum.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -44,21 +47,23 @@ public class ExceptionControlHandler {
         return new ErrorResponse(HttpStatus.CONFLICT.name(), reason, e.getMessage(), now);
     }
 
+    @Order(Ordered.HIGHEST_PRECEDENCE)
     @ExceptionHandler({BadRequestException.class,
             MethodArgumentTypeMismatchException.class,
             MethodArgumentNotValidException.class,
-            HttpMessageNotReadableException.class})
+            HttpMessageNotReadableException.class,
+            MissingServletRequestParameterException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleBadRequestException(BadRequestException e) {
+    public ErrorResponse handleBadRequestException(Exception e) {
         String reason = "Incorrectly made request.";
         log.error(e.getMessage(), e);
         return new ErrorResponse(HttpStatus.BAD_REQUEST.name(), reason, e.getMessage(), now);
     }
 
-    @ExceptionHandler(InternalServerErrorException.class)
+    @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleInternalServerErrorException(InternalServerErrorException e) {
-        String reason = "Internal server error.";
+    public ErrorResponse handleInternalServerErrorException(Exception e) {
+        String reason = "Another Exception";
         log.error(e.getMessage(), e);
         return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.name(), reason, e.getMessage(), now);
     }

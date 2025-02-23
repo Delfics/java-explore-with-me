@@ -69,8 +69,7 @@ public class Event {
 
     @Column(name = "title", length = 120)
     private String title;
-
-    @Column(name = "views")
+    
     private Long views;
 
     @ManyToOne(fetch = FetchType.LAZY)

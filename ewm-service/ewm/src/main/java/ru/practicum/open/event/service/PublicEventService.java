@@ -16,6 +16,7 @@ import ru.practicum.enums.State;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -113,14 +114,15 @@ public class PublicEventService {
                         throw new NotFoundException("Event must be published");
                     }
                 });
+
+        List<Event> eventsWithStat = new ArrayList<>();
+
         for (Event event : typedQuery.getResultList()) {
-            Long views = event.getViews();
-            views = views + 1;
-            event.setViews(views);
-            privateEventStorage.save(event);
+            Event eventById = getEventById(event.getId(), request);
+            eventsWithStat.add(eventById);
         }
 
-        return typedQuery.getResultList();
+        return eventsWithStat;
     }
 
     public Event getEventById(Long eventId, HttpServletRequest request) throws Exception {
