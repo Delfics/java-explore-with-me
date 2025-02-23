@@ -69,9 +69,7 @@ public class Event {
 
     @Column(name = "title", length = 120)
     private String title;
-    
     private Long views;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "compilation_id", referencedColumnName = "id")
     private Compilation compilation;
