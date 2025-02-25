@@ -95,6 +95,10 @@ public class PrivateParticipationRequestService {
         return privateParticipationRequestStorage.save(participationRequest);
     }
 
+    public ParticipationRequest findRequestByRequesterIdAndEventId(Long requesterId, Long eventId) {
+        return privateParticipationRequestStorage.findRequestByRequesterIdAndEventId(requesterId, eventId);
+    }
+
     public ParticipationRequest cancelRequest(Long userId, Long requestId) {
         ParticipationRequest request = privateParticipationRequestStorage
                 .findRequestByRequesterIdAndRequestId(userId, requestId);

@@ -1,17 +1,16 @@
 package ru.practicum.mapper;
 
 import lombok.experimental.UtilityClass;
+import ru.practicum.dto.*;
 import ru.practicum.mapper.UserMapper;
 import ru.practicum.model.User;
 import ru.practicum.model.Event;
-import ru.practicum.dto.EventFullDto;
-import ru.practicum.dto.EventShortDto;
-import ru.practicum.dto.NewEventDto;
 import ru.practicum.mapper.CategoryMapper;
 import ru.practicum.model.Category;
 import ru.practicum.enums.State;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @UtilityClass
 public class EventMapper {
@@ -36,6 +35,29 @@ public class EventMapper {
         eventFullDto.setTitle(event.getTitle());
         eventFullDto.setViews(event.getViews());
         return eventFullDto;
+    }
+
+    public Event toEvent(EventFullDto eventFullDto) {
+        Event event = new Event();
+        event.setAnnotation(eventFullDto.getAnnotation());
+        event.setCategory(CategoryMapper.toCategory(eventFullDto.getCategory()));
+        event.setConfirmedRequests(eventFullDto.getConfirmedRequests());
+        event.setCreatedOn(eventFullDto.getCreatedOn());
+        event.setDescription(eventFullDto.getDescription());
+        event.setEventDate(eventFullDto.getEventDate());
+        event.setId(eventFullDto.getId());
+        event.setInitiator(UserMapper.toUser(eventFullDto.getInitiator()));
+        event.setLocation(eventFullDto.getLocation());
+        event.setPaid(eventFullDto.getPaid());
+        event.setParticipantLimit(eventFullDto.getParticipantLimit());
+        if (eventFullDto.getPublishedOn() != null) {
+            event.setPublishedOn(eventFullDto.getPublishedOn());
+        }
+        event.setRequestModeration(eventFullDto.getRequestModeration());
+        event.setState(eventFullDto.getState());
+        event.setTitle(eventFullDto.getTitle());
+        event.setViews(eventFullDto.getViews());
+        return event;
     }
 
     public EventShortDto toEventShortDto(Event event) {
@@ -70,5 +92,27 @@ public class EventMapper {
         event.setState(State.PENDING);
         event.setViews(zero);
         return event;
+    }
+
+    public static EventWithCommentsDto toEventWithCommentsDto(EventFullDto event, List<CommentDtoRequired> comments) {
+        EventWithCommentsDto dto = new EventWithCommentsDto();
+        dto.setAnnotation(event.getAnnotation());
+        dto.setCategory(event.getCategory());
+        dto.setConfirmedRequests(event.getConfirmedRequests());
+        dto.setCreatedOn(event.getCreatedOn());
+        dto.setDescription(event.getDescription());
+        dto.setEventDate(event.getEventDate());
+        dto.setId(event.getId());
+        dto.setInitiator(event.getInitiator());
+        dto.setLocation(event.getLocation());
+        dto.setPaid(event.getPaid());
+        dto.setParticipantLimit(event.getParticipantLimit());
+        dto.setPublishedOn(event.getPublishedOn());
+        dto.setRequestModeration(event.getRequestModeration());
+        dto.setState(event.getState());
+        dto.setTitle(event.getTitle());
+        dto.setViews(event.getViews());
+        dto.setComments(comments);
+        return dto;
     }
 }

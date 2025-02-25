@@ -5,21 +5,18 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.model.User;
+import ru.practicum.closed.user.event.repository.CommentStorage;
+import ru.practicum.dto.*;
+import ru.practicum.mapper.CommentMapper;
+import ru.practicum.mapper.UserMapper;
+import ru.practicum.model.*;
 import ru.practicum.administrative.user.service.AdminUserService;
 import ru.practicum.mapper.EventMapper;
-import ru.practicum.model.Event;
-import ru.practicum.model.EventRequestStatusUpdateResult;
-import ru.practicum.model.UpdateEventUserRequest;
 import ru.practicum.closed.user.event.repository.PrivateEventStorage;
-import ru.practicum.model.ParticipationRequest;
 import ru.practicum.closed.user.request.service.PrivateParticipationRequestService;
-import ru.practicum.dto.EventRequestStatusUpdateRequestDto;
-import ru.practicum.dto.NewEventDto;
 import ru.practicum.exception.BadRequestException;
 import ru.practicum.exception.ConflictException;
 import ru.practicum.exception.NotFoundException;
-import ru.practicum.model.Category;
 import ru.practicum.open.category.service.PublicCategoryService;
 import ru.practicum.enums.State;
 import ru.practicum.enums.StateAction;
@@ -28,6 +25,7 @@ import ru.practicum.enums.Status;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -36,15 +34,18 @@ public class PrivateUserEventService {
     private final PrivateParticipationRequestService privateParticipationRequestService;
     private final AdminUserService adminUserService;
     private final PublicCategoryService publicCategoryService;
+    private final CommentStorage commentStorage;
 
     public PrivateUserEventService(PrivateEventStorage privateEventStorage,
                                    PrivateParticipationRequestService privateParticipationRequestService,
                                    AdminUserService adminUserService,
-                                   PublicCategoryService publicCategoryService) {
+                                   PublicCategoryService publicCategoryService,
+                                   CommentStorage commentStorage) {
         this.privateEventStorage = privateEventStorage;
         this.privateParticipationRequestService = privateParticipationRequestService;
         this.adminUserService = adminUserService;
         this.publicCategoryService = publicCategoryService;
+        this.commentStorage = commentStorage;
     }
 
     public List<Event> findAll(Long userId, Long from, Long size) {
@@ -222,5 +223,71 @@ public class PrivateUserEventService {
         event.setConfirmedRequests(size);
         privateEventStorage.save(event);
         return result;
+    }
+
+    public Comment createComment(Comment comment, Long userId, Long eventId) {
+        LocalDateTime now = LocalDateTime.now();
+        ParticipationRequest request = privateParticipationRequestService.findRequestByRequesterIdAndEventId(userId,
+                eventId);
+        Event event = findByEventId(eventId);
+
+        if (request.getStatus().equals(Status.CONFIRMED) && event.getEventDate().isAfter(now)) {
+            Comment savedComment = commentStorage.save(comment);
+            log.debug("Комментарий успешно создан {}", savedComment.getId());
+            return savedComment;
+        } else {
+            throw new BadRequestException("Такой пользователь не может оставить комментарий");
+        }
+    }
+
+    public EventWithCommentsDto findEventWithCommentsByEventId(Long eventId) {
+        Event byEventId = findByEventId(eventId);
+        EventFullDto eventFullDto = EventMapper.toEventFullDto(byEventId);
+        List<Comment> commentsByEventId = commentStorage.findCommentsByEventId(eventId);
+        List<CommentDtoRequired> list = commentsByEventId.stream()
+                .map(CommentMapper::toDto)
+                .toList();
+        return EventMapper.toEventWithCommentsDto(eventFullDto, list);
+    }
+
+    public void deleteCommentById(Long userId, Long commentId) {
+        Optional<Comment> byId = commentStorage.findById(commentId);
+        if (byId.isPresent()) {
+            if (byId.get().getUser().getId().equals(userId)) {
+                commentStorage.delete(byId.get());
+            } else {
+                throw new BadRequestException("Вы не являетесь пользователем который оставил комментарий");
+            }
+        } else {
+            throw new NotFoundException("Comment with id=" + commentId + " не найден");
+        }
+    }
+
+    public Comment patchCommentById(CommentDto comment, Long userId, Long commentId) {
+        Optional<Comment> byId = commentStorage.findById(commentId);
+        if (byId.isPresent()) {
+            if (byId.get().getUser().getId().equals(userId)) {
+                byId.get().setText(comment.getText());
+                return commentStorage.save(byId.get());
+            } else {
+                throw new BadRequestException("Вы не являетесь пользователем который оставил комментарий");
+            }
+        } else {
+            throw new NotFoundException("Comment with id=" + commentId + " не найден");
+        }
+    }
+
+    public CommentDto addAuthorToCommentDto(CommentDto commentDto, Long userId) {
+        User byId = adminUserService.findById(userId);
+        commentDto.setAuthor(UserMapper.toUserDto(byId));
+        log.debug("Добавил author в commentDto");
+        return commentDto;
+    }
+
+    public CommentDto addEventToCommentDto(CommentDto commentDto, Long eventId) {
+        Event byId = findByEventId(eventId);
+        commentDto.setEvent(EventMapper.toEventFullDto(byId));
+        log.debug("Добавил event в commentDto");
+        return commentDto;
     }
 }
