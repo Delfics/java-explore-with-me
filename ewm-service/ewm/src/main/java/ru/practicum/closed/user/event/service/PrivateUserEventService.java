@@ -225,19 +225,11 @@ public class PrivateUserEventService {
         return result;
     }
 
-    public Comment createComment(Comment comment, Long userId, Long eventId) {
-        LocalDateTime now = LocalDateTime.now();
-        ParticipationRequest request = privateParticipationRequestService.findRequestByRequesterIdAndEventId(userId,
-                eventId);
-        Event event = findByEventId(eventId);
+    public Comment createComment(Comment comment) {
+        Comment savedComment = commentStorage.save(comment);
+        log.debug("Комментарий успешно создан {}", savedComment.getId());
+        return savedComment;
 
-        if (request.getStatus().equals(Status.CONFIRMED) && event.getEventDate().isAfter(now)) {
-            Comment savedComment = commentStorage.save(comment);
-            log.debug("Комментарий успешно создан {}", savedComment.getId());
-            return savedComment;
-        } else {
-            throw new BadRequestException("Такой пользователь не может оставить комментарий");
-        }
     }
 
     public EventWithCommentsDto findEventWithCommentsByEventId(Long eventId) {

@@ -79,16 +79,15 @@ public class PrivateUserEventController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/{userId}/comments/{eventId}")
-    public CommentDtoRequired createComment(@RequestBody CommentDto commentDto,  @PathVariable("userId") Long userId,
+    @PostMapping("/{userId}/comments/events/{eventId}")
+    public CommentDtoRequired createComment(@RequestBody @Valid CommentDto commentDto, @PathVariable("userId") Long userId,
                                             @PathVariable("eventId") Long eventId) {
         CommentDto commentDto1 = privateUserEventService.addAuthorToCommentDto(commentDto, userId);
         commentDto1 = privateUserEventService.addEventToCommentDto(commentDto1, eventId);
-        return CommentMapper.toDto(privateUserEventService.createComment(CommentMapper.toComment(commentDto1), userId,
-                eventId));
+        return CommentMapper.toDto(privateUserEventService.createComment(CommentMapper.toComment(commentDto1)));
     }
 
-    @GetMapping("/comments/{eventId}")
+    @GetMapping("/comments/events/{eventId}")
     public EventWithCommentsDto findByEventWithComments(@PathVariable Long eventId) {
         return privateUserEventService.findEventWithCommentsByEventId(eventId);
     }
@@ -100,7 +99,7 @@ public class PrivateUserEventController {
     }
 
     @PatchMapping("/{userId}/comments/{commentId}")
-    public CommentDtoRequired patchComment(@RequestBody CommentDto commentDto, @PathVariable Long userId,
+    public CommentDtoRequired patchComment(@RequestBody @Valid CommentDto commentDto, @PathVariable Long userId,
                                            @PathVariable Long commentId) {
         return CommentMapper.toDto(privateUserEventService.patchCommentById(commentDto, userId, commentId));
     }

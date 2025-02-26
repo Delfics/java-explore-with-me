@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 public class CommentDtoRequired {
     Long id;
     Long eventId;
-    String text;
     String authorName;
+    String text;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     LocalDateTime created;
 }
