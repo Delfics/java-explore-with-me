@@ -29,4 +29,11 @@ public class UserMapper {
         userShortDto.setName(user.getName());
         return userShortDto;
     }
+
+    public User toUser(UserShortDto userShortDto) {
+        User user = new User();
+        user.setId(userShortDto.getId());
+        user.setName(userShortDto.getName());
+        return user;
+    }
 }

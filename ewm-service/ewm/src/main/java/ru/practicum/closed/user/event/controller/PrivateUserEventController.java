@@ -11,6 +11,7 @@ import ru.practicum.model.UpdateEventUserRequest;
 import ru.practicum.closed.user.event.service.PrivateUserEventService;
 import ru.practicum.mapper.ParticipationRequestMapper;
 import ru.practicum.closed.user.request.service.PrivateParticipationRequestService;
+import ru.practicum.mapper.CommentMapper;
 import ru.practicum.dto.*;
 
 import java.util.List;
@@ -75,5 +76,31 @@ public class PrivateUserEventController {
         return privateUserEventService.patchRequestsByUserIdAndEventId(
                 initiatorId, eventId, eventRequestStatusUpdateRequestDto);
 
+    }
+
+    @ResponseStatus(HttpStatus.CREATED)
+    @PostMapping("/{userId}/comments/events/{eventId}")
+    public CommentDtoRequired createComment(@RequestBody @Valid CommentDto commentDto, @PathVariable("userId") Long userId,
+                                            @PathVariable("eventId") Long eventId) {
+        CommentDto commentDto1 = privateUserEventService.addAuthorToCommentDto(commentDto, userId);
+        commentDto1 = privateUserEventService.addEventToCommentDto(commentDto1, eventId);
+        return CommentMapper.toDto(privateUserEventService.createComment(CommentMapper.toComment(commentDto1)));
+    }
+
+    @GetMapping("/comments/events/{eventId}")
+    public EventWithCommentsDto findByEventWithComments(@PathVariable Long eventId) {
+        return privateUserEventService.findEventWithCommentsByEventId(eventId);
+    }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{userId}/comments/{commentId}")
+    public void deleteComment(@PathVariable Long userId, @PathVariable Long commentId) {
+        privateUserEventService.deleteCommentById(userId, commentId);
+    }
+
+    @PatchMapping("/{userId}/comments/{commentId}")
+    public CommentDtoRequired patchComment(@RequestBody @Valid CommentDto commentDto, @PathVariable Long userId,
+                                           @PathVariable Long commentId) {
+        return CommentMapper.toDto(privateUserEventService.patchCommentById(commentDto, userId, commentId));
     }
 }
